@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slaughter Cataloger — Introduction</title>
+  <style>
+    :root{
+      --paper:#ffffff;
+      --ink:#111111;
+      --ink-soft:#4a4a4a;
+      --line:#c9c9c9;
+      --line-strong:#8a8a8a;
+      --panel:#f3f3f1;
+      --entry:#a3410a;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    body{
+      background:var(--paper);
+      color:var(--ink);
+      font-family:"Courier New", Courier, monospace;
+      font-size:14px;
+      line-height:1.7;
+      max-width:780px;
+      margin:0 auto;
+      padding:48px 32px 80px;
+    }
+
+    header{margin-bottom:16px; padding-bottom:6px;}
+    h1{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:13px; font-weight:700;
+      letter-spacing:2.5px; text-transform:uppercase;
+      margin-bottom:4px;
+      display:flex; align-items:baseline; justify-content:space-between;
+    }
+    h1 .beta{
+      font-size:9px; letter-spacing:3px; font-weight:400;
+      color:var(--ink-soft); vertical-align:middle;
+    }
+    .subtitle{
+      font-size:11px; color:var(--ink-soft); letter-spacing:.5px;
+      font-style:italic;
+    }
+
+    h2{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:10px; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink-soft);
+      background:#fdf0e8;
+      padding:5px 8px;
+      margin:20px 0 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    p{margin-bottom:1em;}
+
+    strong{color:var(--ink); font-weight:700;}
+    em{font-style:italic;}
+
+    .feature{margin-bottom:1.4em;}
+    .feature-title{
+      color:var(--ink);
+      font-weight:700;
+      display:inline;
+    }
+
+    .state-block{
+      margin-bottom:1.2em;
+      padding-left:14px;
+      border-left:2px solid var(--line);
+    }
+    .state-filled   .state-label{color:var(--entry); font-weight:700;}
+    .state-spec     .state-label{color:var(--ink); font-weight:700;}
+    .state-na       .state-label{color:var(--ink-soft); font-weight:700;}
+    .state-unaddr   .state-label{
+      font-weight:700;
+      text-decoration:underline;
+      text-decoration-color:#e8a87c;
+      text-decoration-thickness:2px;
+      text-underline-offset:3px;
+    }
+
+    hr{border:none; border-top:1px solid var(--line); margin:36px 0;}
+
+    footer{
+      margin-top:48px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+      font-size:11px;
+      color:var(--ink-soft);
+      letter-spacing:.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Slaughter Cataloger <span class="beta">:: Beta One</span> <a href="slaughter-cataloger-beta1.html" style="font-size:10px; letter-spacing:1px; font-weight:400; color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry); text-transform:none; margin-left:auto; padding-left:20px; white-space:nowrap;">→ Open Cataloger</a></h1>
+    <div class="subtitle">A Bibliographic Tool for Serialized Publications</div>
+    <p style="margin-top:8px; font-size:11px; color:var(--ink-soft); line-height:1.5;">This is a beta release — functional and ready for real use, but still being refined based on feedback. If you encounter a bug, find a field that doesn't behave as expected, or have a suggestion, please write to <a href="mailto:thecreep@underworldamusements.com" style="color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry);">thecreep@underworldamusements.com</a>.</p>
+
+    <nav style="margin-top:14px; font-size:11px; line-height:2; color:var(--ink-soft);">
+      <a href="#what-it-is" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">What It Is</a> &nbsp;·&nbsp;
+      <a href="#what-it-tracks" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">What It Tracks</a> &nbsp;·&nbsp;
+      <a href="#field-states" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">Field States</a> &nbsp;·&nbsp;
+      <a href="#key-features" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">Key Features</a> &nbsp;·&nbsp;
+      <a href="#scope" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">A Note on Scope</a> &nbsp;·&nbsp;
+      <a href="#release-history" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">Release History</a>
+    </nav>
+  </header>
+
+  <h2 id="what-it-is">What It Is</h2>
+
+  <p>The Slaughter Cataloger is a single-file browser application for building a structured, exportable bibliography of periodicals — newsletters, magazines, journals, newspapers, zines, bulletins, and any other serialized publication issued in numbered installments.</p>
+
+  <p>It produces a <strong>canonical issue list</strong>: a record of what was published, when, and under what numbering — not a personal inventory of what you own. That distinction is intentional. Holdings tracking (which copies you have, their condition, what you paid) belongs somewhere else. This tool answers the prior question: <em>what issues exist?</em></p>
+
+  <p>Everything runs locally in your browser. No account, no server, no data leaves your machine. The output is a standard CSV you can open in any spreadsheet application, import into Zotero, or feed into other tools. CSV is a deliberate choice for longevity: it is readable by every data tool that has ever existed and every one that will. As AI-assisted conversion becomes routine, a well-structured CSV can be transformed into virtually any target format — a different database schema, a custom bibliography system, a markup format that doesn't exist yet — with minimal effort. Fields that don't map cleanly to a new system's structure can be folded into a notes field automatically rather than lost. The data you enter today is not hostage to any particular piece of software, including this one.</p>
+
+  <h2 id="what-it-tracks">What It Tracks</h2>
+
+  <p>Fields are organized into two tiers:</p>
+
+  <p><strong>Title Level</strong> — facts stable across the run of a publication: title, subtitle, former and later titles, publisher, editor(s), ISSN, language, series, city, country, frequency, and related identifying information. You fill these in once and they carry forward.</p>
+
+  <p><strong>Issue Level</strong> — facts specific to a single numbered issue: volume, issue/no. within volume, whole number, year, month(s), day, date as printed, contributors, edition, issue designation, price, pages, size, short name, and notes. Some of these auto-advance after each entry; others stay sticky until you change them.</p>
+
+  <p>The CSV schema is comprehensive: 43 columns covering everything from Series Number and Evidence Basis to Calendar Note and Supplement Label. It is designed to accommodate the full bibliographic range of serial publishing, including non-standard calendars, year-spanning issues, double issues, simultaneous editions, seasonal dating, and supplements.</p>
+
+  <h2 id="field-states">Field States</h2>
+
+  <p>Every field in the Cataloger can be in one of four states, and the interface makes all four visually distinct:</p>
+
+  <div class="state-block state-filled">
+    <p><span class="state-label">Filled — normal confidence.</span> You've entered a value and stand behind it. The text appears in bold dark orange, distinct from labels and placeholder text.</p>
+  </div>
+
+  <div class="state-block state-spec">
+    <p><span class="state-label">Speculative.</span> You've entered a value, but something is uncertain — the masthead is missing, the date was illegible, the information is secondhand, or what's printed is known to be wrong. Check the <strong>?</strong> beside the field. The entry-wide <strong>Speculative</strong> toggle in the top right corner lights up automatically. In the exported CSV, both a boolean flag and a list of which specific fields were flagged are recorded, so the uncertainty travels with the data.</p>
+  </div>
+
+  <div class="state-block state-na">
+    <p><span class="state-label">N/A.</span> This field simply doesn't apply — the publication has no volume numbering, or this issue has no whole number, or ISSN was never assigned. Clicking <strong>N/A</strong> grays the field out and records it as explicitly addressed. This is meaningfully different from leaving a field blank: it says <em>I considered this and it isn't applicable</em>, not <em>I haven't gotten to this yet</em>.</p>
+  </div>
+
+  <div class="state-block state-unaddr">
+    <p><span class="state-label">Unaddressed.</span> The field has not been touched — no value, no ?, no N/A. These fields show a light orange underline. This is a prompt, not an error. Many fields will legitimately stay unaddressed for a given issue, and that's fine. But when a field you'd expect to fill in is still orange after the rest of the form is done, it catches your eye. After you Record an entry and the form resets, any fields that cleared will briefly glow orange again — a gentle nudge to confirm or carry forward.</p>
+  </div>
+
+  <p>Two fields are pre-filled and sticky by default: <strong>Language</strong> (English) and <strong>Country</strong> (USA). For most English-language American periodical research these will never need to change. If you do change them — say, for a run of British anarchist journals — the new value sticks for the rest of the session.</p>
+
+  <p>Hover over any field label for a tooltip explaining what belongs there and how it differs from adjacent fields. The distinction between <em>Issue / No.</em> (within the current volume) and <em>Whole No.</em> (cumulative from issue one) is a common source of confusion, and the tooltips address it directly.</p>
+
+  <h2 id="key-features">Key Features</h2>
+
+  <div class="feature">
+    <p><span class="feature-title">Auto-advance.</span> After recording an entry, Volume, Issue/No., Whole No., and Month(s) can advance automatically. The auto-advance panel lets you choose which fields participate. Month(s) advances by the span of what you selected — a bimonthly Jan–Feb selection advances to Mar–Apr — and wraps correctly at year boundaries, including year-spanning issues like Dec. 1989–Jan. 1990, where the year field updates to the end year on the next advance.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Season mode.</span> For periodicals that date issues by season rather than month, toggle Month(s) to Season mode. Spring, Summer, Fall, and Winter work identically to months — multi-selectable, auto-advancing, sticky.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Issue Designation.</span> The <strong>Special</strong> toggle marks an issue as a special or themed issue without displacing its normal numbering. Volume, Issue/No., and Whole No. remain fully editable; the designation (e.g. <em>Special Poetry Issue</em>, <em>Double Issue</em>, <em>Anniversary Number</em>) is stored and exported as a separate field alongside them. <strong>Supplement</strong> is handled distinctly: it marks an issue as appended to or issued alongside a numbered issue rather than as a numbered issue in its own right, which is a different bibliographic relationship.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Short Name.</span> A compact reference label for each issue, auto-filled from the title plus volume/issue identifiers (e.g. <em>The Eagle and The Serpent V2 I1</em>). Intended for barcode labels and quick lookup. Override it freely — once you type in the field, auto-fill stops.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Examined / Reported.</span> The top-right <strong>Examined</strong> toggle records the evidential basis of each entry. <em>Examined</em> means you have personally inspected this issue. Toggle to <em>Reported</em> and a source note field appears — record where the information comes from: a dealer catalog, WorldCat, a citation in another bibliography, a photograph from a colleague. This is not the same as Speculative: an entry can be confidently Reported (clear photo, trusted citation) or uncertainly Examined (damaged copy, illegible date). Both dimensions are exported.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Duplicate detection.</span> The duplicate check uses Title + Series + Volume + Issue + Whole No. + Date as Printed + Edition + Issue Designation as its key. Two issues of different journals with the same numbering don't collide. Two editions of the same issue (City vs. National) are treated as distinct records.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Session persistence.</span> Entries are automatically saved to browser localStorage on every change. If you close the tab accidentally, reopening the file offers to restore your previous session. A timed CSV autosave runs every 15 minutes as a secondary safety net. Closing the tab with unsaved entries triggers a browser warning.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Undo delete.</span> Deleting a row shows a six-second undo strip. One level, no drama.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Import / Export.</span> Export to CSV at any time. Import a previously exported CSV and the original cataloging order is restored from the Entry Order column. The schema uses named columns, so future versions can add fields without scrambling existing data.</p>
+  </div>
+
+  <div class="feature">
+    <p><span class="feature-title">Two table views.</span> The compiled issues table defaults to a compact view showing the most useful columns. Toggle to full view to see everything. Columns are sortable; the Entry Order column always lets you return to your original cataloging sequence.</p>
+  </div>
+
+  <h2 id="scope">A Note on Scope</h2>
+
+  <p>This tool is designed for the full range of serial publishing — from mainstream magazines and newspapers to the individualist anarchist press, the occult journal, the labor broadside, the little magazine, the radical newsletter, the zine with irregular publication history and idiosyncratic numbering. Fields like <em>Former Title(s)</em>, <em>Later Title(s)</em>, <em>Alt. calendar</em>, <em>Supplement</em>, and <em>Issue Designation</em> are not afterthoughts — they are there because the material demands them.</p>
+
+  <p>The Cataloger does not tell you how to catalog. It gives you a structure flexible enough to meet the material on its own terms.</p>
+
+  <h2 id="release-history">Release History</h2>
+
+  <div style="font-size:13px; line-height:1.8;">
+    <p><strong>Beta One</strong> &nbsp;—&nbsp; July 6, 2026</p>
+    <p style="color:var(--ink-soft); font-size:12px; margin-top:2px;">Initial beta release. Distributed to a small group of testers. Core data model established: two-tier form (Title Level / Issue Level), 43-column CSV schema, localStorage session persistence, duplicate detection, auto-advance, Examined/Reported evidence basis, Issue Designation, and full field-state system (Filled, Speculative, N/A, Unaddressed).</p>
+  </div>
+
+  <footer>
+    Slaughter Cataloger — Beta 1 &nbsp;·&nbsp; Developed by Kevin Slaughter / Underworld Amusements
+  </footer>
+
+</body>
+</html>
