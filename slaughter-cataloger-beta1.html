@@ -280,25 +280,25 @@
       <div class="grid">
         <div class="field span-2">
           <div class="label-row"><label for="f-title" title="The full title of the periodical as it appears on the masthead or cover.">Title</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="title">?</button><button type="button" class="na-toggle" data-field="title">N/A</button></div></div>
-          <input type="text" id="f-title" placeholder="e.g. The Eagle and The Serpent">
+          <input type="text" id="f-title" placeholder="e.g. The Saturday Review">
         </div>
         <div class="field span-2">
-          <div class="label-row"><label for="f-subtitle" title="A secondary title or descriptive phrase that appears with the title — e.g. 'A Journal of Egoistic Philosophy and Sociology.' Often changes between runs.">Subtitle <span class="opt">optional</span></label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="subtitle">?</button><button type="button" class="na-toggle" data-field="subtitle">N/A</button></div></div>
-          <input type="text" id="f-subtitle" placeholder="e.g. A Journal of Egoistic Philosophy and Sociology">
+          <div class="label-row"><label for="f-subtitle" title="A secondary title or descriptive phrase that appears with the title — e.g. 'A Weekly Journal of Politics, Literature and Art.' Often changes between runs.">Subtitle <span class="opt">optional</span></label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="subtitle">?</button><button type="button" class="na-toggle" data-field="subtitle">N/A</button></div></div>
+          <input type="text" id="f-subtitle" placeholder="e.g. A Weekly Journal of Politics, Literature and Art">
         </div>
 
         <div class="field span-2">
           <div class="label-row"><label for="f-former-title" title="What this periodical was called before it adopted its current title. Separate multiple former titles with semicolons.">Former Title(s) <span class="opt">optional</span></label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="formerTitle">?</button><button type="button" class="na-toggle" data-field="formerTitle">N/A</button></div></div>
-          <input type="text" id="f-former-title" placeholder="e.g. The Stirner Monthly">
+          <input type="text" id="f-former-title" placeholder="e.g. The Literary Digest">
         </div>
         <div class="field span-2">
           <div class="label-row"><label for="f-later-title" title="What this periodical was called after the run you are cataloging. Useful for linking a title's history.">Later Title(s) <span class="opt">optional</span></label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="laterTitle">?</button><button type="button" class="na-toggle" data-field="laterTitle">N/A</button></div></div>
-          <input type="text" id="f-later-title" placeholder="e.g. The New Egoist">
+          <input type="text" id="f-later-title" placeholder="e.g. The New Review">
         </div>
 
         <div class="field span-2">
           <div class="label-row"><label for="f-publisher" title="The organization or person responsible for publishing the periodical. Use the form as it appears on the issue.">Publisher</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="publisher">?</button><button type="button" class="na-toggle" data-field="publisher">N/A</button></div></div>
-          <input type="text" id="f-publisher" list="publisher-datalist" placeholder="e.g. Union of Egoists">
+          <input type="text" id="f-publisher" list="publisher-datalist" placeholder="e.g. Hearst Publications">
           <datalist id="publisher-datalist"></datalist>
         </div>
         <div class="field span-2">
@@ -315,13 +315,13 @@
           <input type="text" id="f-language" value="English">
         </div>
         <div class="field">
-          <div class="label-row"><label for="f-series" title="A named series this title belongs to — e.g. 'Stand Alone' or 'Second Series.' Not the same as a volume sequence; use this when the publisher explicitly groups titles under a series name.">Series</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="series">?</button><button type="button" class="na-toggle" data-field="series">N/A</button></div></div>
-          <input type="text" id="f-series" list="series-datalist" placeholder="e.g. Stand Alone or Second Series">
+          <div class="label-row"><label for="f-series" title="A named series this title belongs to — e.g. 'New Series' or 'Colonial Edition.' Not the same as a volume sequence; use this when the publisher explicitly groups titles under a series name.">Series</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="series">?</button><button type="button" class="na-toggle" data-field="series">N/A</button></div></div>
+          <input type="text" id="f-series" list="series-datalist" placeholder="e.g. New Series or Colonial Edition">
           <datalist id="series-datalist"></datalist>
         </div>
         <div class="field">
-          <div class="label-row"><label for="f-series-number" title="The number of this title within the named series — e.g. SA1340. Distinct from Volume or Issue numbering.">Series No.</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="seriesNumber">?</button><button type="button" class="na-toggle" data-field="seriesNumber">N/A</button></div></div>
-          <input type="text" id="f-series-number" placeholder="e.g. SA1340">
+          <div class="label-row"><label for="f-series-number" title="The number of this title within the named series — e.g. NS-14. Distinct from Volume or Issue numbering.">Series No.</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="seriesNumber">?</button><button type="button" class="na-toggle" data-field="seriesNumber">N/A</button></div></div>
+          <input type="text" id="f-series-number" placeholder="e.g. Vol. 12 Ser. 2">
         </div>
 
         <div class="field">
@@ -371,10 +371,10 @@
           <input type="text" id="f-special-label" class="sub-input" placeholder="Special Issue">
         </div>
         <div class="field">
-          <div class="label-row"><label for="f-year" title="The year of publication in the calendar system used. Use CE for the standard Gregorian calendar; toggle to Alt. for non-standard epochs (Anno Satanas, Thelemic years, etc.) and add a note.">Year</label><div class="toggle-group"><button type="button" class="calendar-btn active" data-calendar="ce" title="Common Era / standard calendar">CE</button><button type="button" class="calendar-btn" data-calendar="alt" title="Non-traditional epoch or calendar — some radical journals date issues from a different starting point, and a &quot;year&quot; may not run Jan–Dec.">Alt.</button><button type="button" class="spec-toggle" data-field="year">?</button><button type="button" class="na-toggle" data-field="year">N/A</button></div></div>
+          <div class="label-row"><label for="f-year" title="The year of publication in the calendar system used. Use CE for the standard Gregorian calendar; toggle to Alt. for non-standard epochs or dating systems and add a note.">Year</label><div class="toggle-group"><button type="button" class="calendar-btn active" data-calendar="ce" title="Common Era / standard calendar">CE</button><button type="button" class="calendar-btn" data-calendar="alt" title="Non-traditional epoch or calendar — some periodicals date issues from a different starting point, and a &quot;year&quot; may not run Jan–Dec.">Alt.</button><button type="button" class="spec-toggle" data-field="year">?</button><button type="button" class="na-toggle" data-field="year">N/A</button></div></div>
           <input type="text" id="f-year" inputmode="numeric" placeholder="e.g. 1898">
           <input type="text" id="f-year-end" class="year-end-input" inputmode="numeric" placeholder="End year, if issue spans (e.g. 1990)" title="For issues covering a year boundary, e.g. Dec. 1989 – Jan. 1990: put 1989 in Year and 1990 here.">
-          <input type="text" id="f-calendar-note" class="sub-input" placeholder="Calendar/epoch, e.g. Anno Satanas, Year IX of the New Aeon">
+          <input type="text" id="f-calendar-note" class="sub-input" placeholder="e.g. Year 37 of the Republic, Hebrew calendar, fiscal year">
         </div>
 
         <div class="field span-2">
@@ -389,7 +389,7 @@
         </div>
         <div class="field">
           <div class="label-row"><label for="f-date-printed" title="The date exactly as it appears on the issue — transcribed verbatim. Use this alongside the structured Month/Year fields when the printed form is unusual, archaic, or uses a non-standard calendar.">Date as Printed</label><div class="toggle-group"><button type="button" class="spec-toggle" data-field="datePrinted">?</button><button type="button" class="na-toggle" data-field="datePrinted">N/A</button></div></div>
-          <input type="text" id="f-date-printed" placeholder="e.g. March-April, 1989 / Eastertide / Walpurgisnacht 1982">
+          <input type="text" id="f-date-printed" placeholder="e.g. March-April, 1989 / Midsummer Number / Christmas 1922">
         </div>
 
         <div class="field">
@@ -419,7 +419,7 @@
             <label for="f-shortname" title="A compact reference label for this issue, used for barcode labels and quick identification. Auto-filled from Title + Vol/No — type anything to override." >Short Name <span class="opt">auto-filled from Title + Vol/No — override freely</span></label>
             <div class="toggle-group"><button type="button" class="spec-toggle" data-field="shortname">?</button><button type="button" class="na-toggle" data-field="shortname">N/A</button></div>
           </div>
-          <input type="text" id="f-shortname" placeholder="e.g. Eagle/Serpent V2N1">
+          <input type="text" id="f-shortname" placeholder="e.g. Saturday Review V2N1">
         </div>
 
         <div class="field span-4">
