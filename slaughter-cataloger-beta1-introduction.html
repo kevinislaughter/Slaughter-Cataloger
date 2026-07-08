@@ -96,9 +96,9 @@
 <body>
 
   <header>
-    <h1>Slaughter Cataloger <span class="beta">:: Beta One</span> <a href="slaughter-cataloger-beta1.html" style="font-size:10px; letter-spacing:1px; font-weight:400; color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry); text-transform:none; margin-left:auto; padding-left:20px; white-space:nowrap;">→ Open Cataloger</a></h1>
+    <h1>Slaughter Cataloger <span class="beta">:: Beta 1.1</span> <a href="slaughter-cataloger-beta1.1.html" style="font-size:10px; letter-spacing:1px; font-weight:400; color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry); text-transform:none; margin-left:auto; padding-left:20px; white-space:nowrap;">→ Open Cataloger</a></h1>
     <div class="subtitle">A Bibliographic Tool for Serialized Publications</div>
-    <p style="margin-top:8px; font-size:11px; color:var(--ink-soft); line-height:1.5;">This is a beta release — functional and ready for real use, but still being refined based on feedback. If you encounter a bug, find a field that doesn't behave as expected, or have a suggestion, please write to <a href="mailto:thecreep@underworldamusements.com" style="color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry);">thecreep@underworldamusements.com</a>.</p>
+    <p style="margin-top:8px; font-size:11px; color:var(--ink-soft); line-height:1.5;">This is a beta release — functional and ready for real use, but actively being refined based on feedback and personal use. If you encounter a bug, find a field that doesn't behave as expected, or have a suggestion, please write to <a href="mailto:thecreep@underworldamusements.com" style="color:var(--entry); text-decoration:none; border-bottom:1px solid var(--entry);">thecreep@underworldamusements.com</a>.</p>
 
     <nav style="margin-top:14px; font-size:11px; line-height:2; color:var(--ink-soft);">
       <a href="#what-it-is" style="color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);">What It Is</a> &nbsp;·&nbsp;
@@ -116,7 +116,7 @@
 
   <p>It produces a <strong>canonical issue list</strong>: a record of what was published, when, and under what numbering — not a personal inventory of what you own. That distinction is intentional. Holdings tracking (which copies you have, their condition, what you paid) belongs somewhere else. This tool answers the prior question: <em>what issues exist?</em></p>
 
-  <p>Everything runs locally in your browser. No account, no server, no data leaves your machine. The output is a standard CSV you can open in any spreadsheet application, import into Zotero, or feed into other tools. CSV is a deliberate choice for longevity: it is readable by every data tool that has ever existed and every one that will. As AI-assisted conversion becomes routine, a well-structured CSV can be transformed into virtually any target format — a different database schema, a custom bibliography system, a markup format that doesn't exist yet — with minimal effort. Fields that don't map cleanly to a new system's structure can be folded into a notes field automatically rather than lost. The data you enter today is not hostage to any particular piece of software, including this one.</p>
+  <p>Everything runs locally in your browser. No account, no server, no data leaves your machine. The output is a standard CSV you can open in any spreadsheet application, adapt for Zotero or other cataloging tools. CSV is a deliberate choice for longevity: it is readable by every data tool that has ever existed and every one that will. As AI-assisted conversion becomes routine, a well-structured CSV can be transformed into virtually any target format — a different database schema, a custom bibliography system, a markup format that doesn't exist yet — with minimal effort. Fields that don't map cleanly to a new system's structure can be folded into a notes field automatically rather than lost. The data you enter today is not hostage to any particular piece of software, including this one.</p>
 
   <h2 id="what-it-tracks">What It Tracks</h2>
 
@@ -124,9 +124,9 @@
 
   <p><strong>Title Level</strong> — facts stable across the run of a publication: title, subtitle, former and later titles, publisher, editor(s), ISSN, language, series, city, country, frequency, and related identifying information. You fill these in once and they carry forward.</p>
 
-  <p><strong>Issue Level</strong> — facts specific to a single numbered issue: volume, issue/no. within volume, whole number, year, month(s), day, date as printed, contributors, edition, issue designation, price, pages, size, short name, and notes. Some of these auto-advance after each entry; others stay sticky until you change them.</p>
+  <p><strong>Issue Level</strong> — facts specific to a single numbered issue: volume, issue/no. within volume, whole number, year, month(s), day, date as printed, contributors, edition, printer, printer location, issue designation, price, pages, size, short name, and notes. Some of these auto-advance after each entry; others stay sticky until you change them.</p>
 
-  <p>The CSV schema is comprehensive: 43 columns covering everything from Series Number and Evidence Basis to Calendar Note and Supplement Label. It is designed to accommodate the full bibliographic range of serial publishing, including non-standard calendars, year-spanning issues, double issues, simultaneous editions, seasonal dating, and supplements.</p>
+  <p>The CSV schema is comprehensive: 45 columns covering everything from Series Number and Evidence Basis to Calendar Note and Supplement Label. It is designed to accommodate the full bibliographic range of serial publishing, including non-standard calendars, year-spanning issues, double issues, simultaneous editions, seasonal dating, and supplements.</p>
 
   <h2 id="field-states">Field States</h2>
 
@@ -175,11 +175,11 @@
   </div>
 
   <div class="feature">
-    <p><span class="feature-title">Duplicate detection.</span> The duplicate check uses Title + Series + Volume + Issue + Whole No. + Date as Printed + Edition + Issue Designation as its key. Two issues of different journals with the same numbering don't collide. Two editions of the same issue (City vs. National) are treated as distinct records.</p>
+    <p><span class="feature-title">Duplicate detection.</span> The duplicate check uses Title + Series + Volume + Issue + Whole No. + Date as Printed + Edition, plus Issue Designation for special issues or Supplement Label for supplements. Two issues of different journals with the same numbering don't collide. Two editions of the same issue (City vs. National) are treated as distinct records.</p>
   </div>
 
   <div class="feature">
-    <p><span class="feature-title">Session persistence.</span> Entries are automatically saved to browser localStorage on every change. If you close the tab accidentally, reopening the file offers to restore your previous session. A timed CSV autosave runs every 15 minutes as a secondary safety net. Closing the tab with unsaved entries triggers a browser warning.</p>
+    <p><span class="feature-title">Session persistence.</span> Entries are saved reliably to browser localStorage on every change. If you close the tab accidentally, reopening the file offers to restore your previous session. A 15-minute CSV autosave runs as a secondary backup, though automatic downloads may depend on your browser's download permissions — manual CSV export remains the dependable way to make a permanent backup. Closing the tab with unsaved entries triggers a browser warning.</p>
   </div>
 
   <div class="feature">
@@ -187,7 +187,7 @@
   </div>
 
   <div class="feature">
-    <p><span class="feature-title">Import / Export.</span> Export to CSV at any time. Import a previously exported CSV and the original cataloging order is restored from the Entry Order column. The schema uses named columns, so future versions can add fields without scrambling existing data.</p>
+    <p><span class="feature-title">Import / Export.</span> Export to CSV at any time. Importing a CSV when entries already exist offers three choices: Replace, Append, or Cancel. Appended imports report how many possible duplicates were detected. The original cataloging order is restored from the Entry Order column, and the schema uses named columns, so future versions can add fields without scrambling existing data.</p>
   </div>
 
   <div class="feature">
@@ -203,12 +203,34 @@
   <h2 id="release-history">Release History</h2>
 
   <div style="font-size:13px; line-height:1.8;">
-    <p><strong>Beta One</strong> &nbsp;—&nbsp; July 6, 2026</p>
-    <p style="color:var(--ink-soft); font-size:12px; margin-top:2px;">Initial beta release. Distributed to a small group of testers. Core data model established: two-tier form (Title Level / Issue Level), 43-column CSV schema, localStorage session persistence, duplicate detection, auto-advance, Examined/Reported evidence basis, Issue Designation, and full field-state system (Filled, Speculative, N/A, Unaddressed).</p>
+
+<p><strong>Beta 1.1</strong> &nbsp;—&nbsp; July 8, 2026</p>
+    <p style="color:var(--ink-soft); font-size:12px; margin-top:2px; margin-bottom:1.2em;">
+      <strong>New fields:</strong> Printer and Printer Location added at Issue Level — the printing house and its city are bibliographically distinct from the publisher and frequently change across a run. CSV schema updated to 45 columns.<br><br>
+      <strong>Form:</strong> Edition moved before Printer in the Issue Level field order.<br><br>
+      <strong>Duplicate detection:</strong> Key now includes Title and Series, so issues from different journals with the same volume/number no longer collide.<br><br>
+      <strong>Table:</strong> Compiled issues table now has a fixed max-height (~7 rows visible) with sticky column headers and independent vertical scrolling, keeping horizontal scroll accessible. Compact view columns size to content rather than stretching to fill space. Compact view trimmed to: # · Short Name · Month(s) · Year.<br><br>
+      <strong>N/A field behavior:</strong> Fields marked N/A no longer show the orange unaddressed underline. They now display <em>[N/A]</em> as placeholder text — confirming the field has been deliberately addressed. Original placeholder restores when N/A is toggled off.<br><br>
+      <strong>N/A and Speculative are now mutually exclusive per field:</strong> activating one clears the other for the same field.<br><br>
+      <strong>Speculative auto-toggle:</strong> the entry-wide Speculative flag now turns on automatically when any field is marked ? and turns off again when all field-level ? marks are cleared. If you click the Speculative header toggle manually, that choice is preserved until the next Record.<br><br>
+      <strong>Supplement fix:</strong> Supplement mode no longer erases the base Issue / No. field. Volume, Issue, and Whole No. remain fully editable when Supplement is active; the supplement designation is stored separately in Supplement Label. Duplicate detection updated accordingly.<br><br>
+      <strong>Sticky field policy clarified:</strong> Contributors, Edition, Day, Date as Printed, and Notes on Issue now clear after each Record. Printer and Printer Location are sticky. Labels updated to reflect actual behavior.<br><br>
+      <strong>Cancel Edit now clears the form</strong> rather than leaving the edited row's data in place.<br><br>
+      <strong>Import: replace, append, or cancel.</strong> Importing a CSV while entries exist now prompts with a three-way choice, and appended imports report how many possible duplicates were detected.<br><br>
+      <strong>Short Name</strong> now updates correctly after auto-advance.<br><br>
+      <strong>Stale Special Label</strong> is now cleared when Special mode is turned off.<br><br>
+      <strong>Sort accessors</strong> added for all sortable columns; clicking any column header no longer risks a runtime error.<br><br>
+      <strong>LocalStorage key versioned</strong> to <code>slaughterCataloger.beta1_1.session</code> to avoid collisions with earlier test versions.<br><br>
+      <strong>Datalist values</strong> now use DOM methods rather than string concatenation, preventing edge cases with special characters in imported data.
+    </p>
+
+    <p><strong>Beta 1.0</strong> &nbsp;—&nbsp; July 6, 2026</p>
+    <p style="color:var(--ink-soft); font-size:12px; margin-top:2px;">Initial beta release (distributed as "Beta One"). Core data model established: two-tier form (Title Level / Issue Level), 43-column CSV schema, localStorage session persistence, duplicate detection, auto-advance, Examined/Reported evidence basis, Issue Designation, and full field-state system (Filled, Speculative, N/A, Unaddressed).</p>
+
   </div>
 
   <footer>
-    Slaughter Cataloger — Beta 1 &nbsp;·&nbsp; Developed by Kevin I. Slaughter / Underworld Amusements
+    Slaughter Cataloger — Beta 1.1 &nbsp;·&nbsp; Developed by Kevin I. Slaughter / Underworld Amusements
   </footer>
 
 </body>

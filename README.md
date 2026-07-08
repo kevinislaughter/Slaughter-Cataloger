@@ -10,13 +10,13 @@ Build a structured, exportable bibliography of periodicals — newsletters, maga
 
 The Slaughter Cataloger produces a **canonical issue list**: a record of what was published, when, and under what numbering. It is not a holdings inventory — it does not track which copies you own. It answers the prior question: *what issues exist?*
 
-Each record captures title-level facts (publisher, editor, ISSN, series, city, frequency) and issue-level facts (volume, issue number, whole number, date, contributors, edition, price, pages, size, notes). Output is a 43-column CSV you can open in any spreadsheet application, import into Zotero, or convert to any other format.
+Each record captures title-level facts (publisher, editor, ISSN, series, city, frequency) and issue-level facts (volume, issue number, whole number, date, contributors, edition, printer, printer location, price, pages, size, notes). Output is a 45-column CSV you can open in any spreadsheet application, adapt for Zotero or other cataloging tools, or convert to any other format.
 
 ---
 
 ## How to Use It
 
-1. Download `slaughter-cataloger-beta1.html`
+1. Download `slaughter-cataloger-beta1.1.html`
 2. Open it in any modern browser
 3. Fill in the form, hit **Record**
 4. Export to CSV when ready
@@ -36,9 +36,9 @@ Optionally download `slaughter-cataloger-beta1-introduction.html` alongside it f
 - **Auto-advance** — Volume, Issue, Whole No., and Month(s) can advance automatically after each record
 - **Season mode** — Spring / Summer / Fall / Winter as an alternative to month selection
 - **Duplicate detection** — keyed on Title + Series + Volume + Issue + Whole No. + Date as Printed + Edition + Issue Designation
-- **Session persistence** — entries auto-save to browser localStorage; restore banner on reopen; 15-minute CSV autosave; unsaved-changes warning on close
+- **Session persistence** — entries auto-save reliably to browser localStorage; restore banner on reopen; 15-minute CSV autosave as a secondary backup (subject to browser download permissions); unsaved-changes warning on close
 - **Undo delete** — six-second undo strip after any row deletion
-- **Import / Export** — named CSV columns; original Entry Order restored on re-import; backward-compatible with older exports
+- **Import / Export** — named CSV columns; importing with existing entries offers Replace / Append / Cancel and reports possible duplicates on append; original Entry Order restored on re-import; backward-compatible with older exports
 - **Hover tooltips** — every field label has an explainer on hover
 
 ---
@@ -51,7 +51,9 @@ See `slaughter-cataloger-beta1-introduction.html` for a full description of fiel
 
 ## Status
 
-**Beta One** — released July 6, 2026.
+**Beta 1.1** — released July 8, 2026. Added Printer and Printer Location fields (sticky). Fixed Supplement and Special handling so base numbering is never erased. N/A and Speculative now mutually exclusive per field; Speculative auto-toggles from field-level ? marks. Cancel Edit clears the form. Import prompts Replace / Append / Cancel and reports possible duplicates. Short Name auto-fills correctly after auto-advance. All sortable columns now have sort accessors. LocalStorage key versioned. Compact view trimmed to # · Short Name · Month(s) · Year. 45-column CSV.
+
+**Beta 1.0** — released July 6, 2026. Initial release (distributed as "Beta One").
 
 Functional and ready for real use, but actively being refined based on feedback. Bug reports and suggestions welcome at [thecreep@underworldamusements.com](mailto:thecreep@underworldamusements.com).
 
@@ -65,4 +67,4 @@ You are free to use, share, and adapt this tool for non-commercial purposes with
 
 ---
 
-*Developed by Kevin Slaughter / [Underworld Amusements](https://underworldamusements.com)*
+*Developed by Kevin I. Slaughter / [Underworld Amusements](https://underworldamusements.com)*
