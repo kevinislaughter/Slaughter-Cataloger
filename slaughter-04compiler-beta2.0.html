@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slaughter Cataloger — Compiler :: Beta 2.0</title>
+<style>
+  :root{
+    --paper:#ffffff;
+    --ink:#111111;
+    --ink-soft:#4a4a4a;
+    --line:#c9c9c9;
+    --line-strong:#8a8a8a;
+    --panel:#f3f3f1;
+    --panel-dark:#e4e4e2;
+    --entry:#a3410a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--panel);
+    color:var(--ink);
+    font-family:"Courier New", Courier, monospace;
+    font-size:14px;
+    line-height:1.5;
+    max-width:960px;
+    margin:0 auto;
+    padding:20px 16px 60px;
+  }
+
+  header{margin-bottom:14px; padding-bottom:6px;}
+  .stamp{
+    display:flex; align-items:baseline; justify-content:space-between;
+    flex-wrap:wrap; gap:4px 20px;
+  }
+  h1{
+    font-family:Georgia, "Times New Roman", serif;
+    font-weight:700; font-size:13px; letter-spacing:2.5px;
+    text-transform:uppercase; margin:0;
+  }
+  h1 .beta{font-size:9px; letter-spacing:3px; font-weight:400; color:var(--ink-soft); vertical-align:middle;}
+  .tagline{font-size:11px; color:var(--ink-soft); letter-spacing:.5px;}
+
+  .card{
+    position:relative; background:var(--paper);
+    border:1px solid var(--ink);
+    padding:26px 24px 20px; margin-bottom:22px;
+  }
+  .card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:repeating-linear-gradient(90deg, var(--ink) 0px, var(--ink) 1px, transparent 1px, transparent 5px);
+  }
+  .card-title{
+    font-family:Georgia, serif; font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:14px;
+  }
+
+  .tier-label{
+    font-family:Georgia, serif; font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:10px; padding:5px 8px;
+    background:#fdf0e8;
+    border-bottom:1px solid var(--line);
+  }
+
+  .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px 16px;}
+  .field{min-width:0;}
+  .field.span-2{grid-column:span 2;}
+  .field.span-3{grid-column:span 3;}
+  .field.span-4{grid-column:span 4;}
+
+  .label-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:Georgia, serif; font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:3px; min-height:18px;
+  }
+  .opt{font-size:8px; letter-spacing:1px; text-transform:none; font-style:italic; color:#999;}
+
+  .btn{font-size:12px; letter-spacing:1px; text-transform:uppercase; padding:9px 18px; border:1px solid var(--ink); background:var(--paper); color:var(--ink); cursor:pointer;}
+  .btn:hover{background:var(--panel-dark);}
+  .btn.primary{background:var(--ink); color:var(--paper); font-weight:bold; padding:11px 30px;}
+  .btn.primary:hover{background:#333;}
+  .btn.ghost{border-color:var(--line-strong); color:var(--ink-soft);}
+  .btn.small{padding:5px 10px; font-size:10.5px;}
+  .btn:disabled{opacity:.4; cursor:not-allowed;}
+  .btn-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:18px;}
+
+  .cb-row{display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; margin-bottom:6px;}
+  .cb-row input[type="checkbox"]{width:15px; height:15px; accent-color:var(--ink); margin:0;}
+
+  select{
+    font-family:inherit; font-size:13px; color:var(--ink); background:var(--paper);
+    border:1px solid var(--line-strong); padding:6px 8px; outline:none; width:100%;
+  }
+  select:focus{border-color:var(--ink);}
+
+  .status{font-size:11px; color:var(--ink-soft); margin-top:8px;}
+
+  .preview-box{
+    background:var(--paper); border:1px solid var(--ink);
+    padding:24px; margin-bottom:22px;
+    max-height:500px; overflow-y:auto;
+    font-family:"Courier New", Courier, monospace;
+    font-size:13px; line-height:1.7;
+  }
+  .preview-box h3{
+    font-family:Georgia, serif; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--ink-soft); margin:20px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line);
+  }
+  .preview-box h3:first-child{margin-top:0;}
+  .preview-box .cl-item{margin-bottom:4px;}
+  .preview-box .cl-check{color:var(--line-strong); margin-right:6px;}
+  .preview-box .cl-speculative{color:var(--ink-soft); font-style:italic; font-size:11px;}
+  .preview-box .cl-issueid{font-size:10px; color:var(--ink-soft); letter-spacing:1px;}
+  .preview-box .cl-detail{font-size:11px; color:var(--ink-soft);}
+
+  .format-coming{
+    font-size:11px; color:var(--ink-soft); font-style:italic;
+    padding:8px; border:1px dashed var(--line); margin-top:6px;
+  }
+
+  footer{
+    margin-top:20px; text-align:center;
+    font-size:10.5px; color:var(--ink-soft); letter-spacing:.4px;
+  }
+  footer a{color:inherit; text-decoration:none; border-bottom:1px solid var(--line-strong);}
+
+  @media (max-width:760px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .field.span-2{grid-column:span 2;}
+    .field.span-3, .field.span-4{grid-column:span 2;}
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="stamp">
+      <h1>Slaughter Cataloger <span class="beta">:: Beta 2.0</span></h1>
+      <div class="tagline">Compiler &nbsp;·&nbsp; Slaughter Cataloger suite</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <p class="card-title">Data Sources</p>
+
+    <div class="tier-label">Import</div>
+    <div class="grid">
+      <div class="field span-2">
+        <div class="label-row"><label for="f-import-issues" title="Import an Issues CSV exported from the Slaughter Cataloger Issues tool. Required for all output formats.">Issues CSV <span class="opt">required</span></label></div>
+        <input type="file" id="f-import-issues" accept=".csv" style="font-size:11px; padding:4px 0;">
+        <div id="issues-status" class="status"></div>
+      </div>
+      <div class="field span-2">
+        <div class="label-row"><label for="f-import-titles" title="Import a Titles CSV for title-library context and validation. Optional for Checklist; required for future title-level outputs.">Titles CSV <span class="opt">optional for Checklist</span></label></div>
+        <input type="file" id="f-import-titles" accept=".csv" style="font-size:11px; padding:4px 0;">
+        <div id="titles-status" class="status"></div>
+      </div>
+      <div class="field span-2">
+        <div class="label-row"><label for="f-import-contents" title="Import a Contents CSV for RIS export, bibliography, and full catalog outputs. Not needed for Checklist.">Contents CSV <span class="opt">required for RIS</span></label></div>
+        <input type="file" id="f-import-contents" accept=".csv" style="font-size:11px; padding:4px 0;">
+        <div id="contents-status" class="status"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Output Format</p>
+
+    <div class="tier-label">Format</div>
+    <div class="grid">
+      <div class="field span-2">
+        <div class="label-row"><label for="f-format">Output Type</label></div>
+        <select id="f-format">
+          <option value="checklist" selected>Checklist</option>
+          <option value="ris">RIS for Zotero (requires Contents CSV)</option>
+          <option value="bibliography" disabled>Bibliography — in development</option>
+          <option value="contents-listing" disabled>Contents Listing — in development</option>
+          <option value="full-catalog" disabled>Full Catalog — in development</option>
+        </select>
+      </div>
+      <div class="field span-2" id="style-field">
+        <div class="label-row"><label for="f-style">Checklist Style</label></div>
+        <select id="f-style">
+          <option value="plain">Plain — checkbox + Short Name + date</option>
+          <option value="biblio">Bibliographic — full citation line</option>
+          <option value="technical">Technical — with IssueID</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tier-label" style="margin-top:18px;">Options</div>
+    <div class="grid">
+      <div class="field span-2">
+        <label class="cb-row"><input type="checkbox" id="opt-checkboxes" checked> Show checkboxes</label>
+        <label class="cb-row"><input type="checkbox" id="opt-issueid"> Show IssueID</label>
+        <label class="cb-row"><input type="checkbox" id="opt-pages"> Show page count</label>
+        <label class="cb-row"><input type="checkbox" id="opt-size"> Show physical size</label>
+        <label class="cb-row"><input type="checkbox" id="opt-price"> Show price</label>
+        <label class="cb-row"><input type="checkbox" id="opt-publisher"> Show publisher</label>
+        <label class="cb-row"><input type="checkbox" id="opt-printer"> Show printer</label>
+      </div>
+      <div class="field span-2">
+        <label class="cb-row"><input type="checkbox" id="opt-speculative"> Flag speculative entries</label>
+        <label class="cb-row"><input type="checkbox" id="opt-notes"> Show notes</label>
+        <label class="cb-row"><input type="checkbox" id="opt-subtitle"> Show subtitle</label>
+        <label class="cb-row"><input type="checkbox" id="opt-group-title" checked> Group by title</label>
+        <label class="cb-row"><input type="checkbox" id="opt-designation"> Show issue designation</label>
+        <label class="cb-row"><input type="checkbox" id="opt-evidence"> Show evidence basis</label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn primary" id="generate-btn" disabled>Generate</button>
+    </div>
+  </div>
+
+  <div id="preview-container" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;">
+      <span style="font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-soft);">Preview</span>
+      <span>
+        <button class="btn small ghost" id="copy-output-btn">Copy</button>
+        <button class="btn small ghost" id="export-html-btn">Export HTML</button>
+        <button class="btn small ghost" id="export-md-btn">Export Markdown</button>
+        <button class="btn small ghost" id="export-txt-btn">Export Plain Text</button>
+      </span>
+    </div>
+    <div class="preview-box" id="preview-box"></div>
+    <div id="export-status" class="status"></div>
+  </div>
+
+  <footer>
+    <a href="slaughter-01titles-beta2.0.html">Titles</a> &nbsp;·&nbsp;
+    <a href="slaughter-02issues-beta2.0.html">Issues</a> &nbsp;·&nbsp;
+    <a href="slaughter-03contents-beta2.0.html">Contents</a> &nbsp;·&nbsp;
+    <a href="slaughter-cataloger-beta2.0.html">Documentation</a>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var issues = [];
+  var titleLibrarySlug = '';
+  var loadedTitles = null;
+  var risReady = false; // true only when Titles + Issues + Contents all loaded and cross-validated
+  var generateBtn = document.getElementById('generate-btn');
+  var previewContainer = document.getElementById('preview-container');
+  var previewBox = document.getElementById('preview-box');
+  var exportStatus = document.getElementById('export-status');
+
+  // ---------- CSV parser ----------
+  function parseCSV(text){
+    var rows = []; var row = []; var field = ''; var inQ = false;
+    for(var i = 0; i < text.length; i++){
+      var c = text[i];
+      if(inQ){
+        if(c === '"' && text[i+1] === '"'){ field += '"'; i++; }
+        else if(c === '"') inQ = false;
+        else field += c;
+      } else {
+        if(c === '"') inQ = true;
+        else if(c === ','){ row.push(field); field = ''; }
+        else if(c === '\n' || c === '\r'){
+          if(c === '\r' && text[i+1] === '\n') i++;
+          row.push(field); field = ''; rows.push(row); row = [];
+        } else field += c;
+      }
+    }
+    row.push(field); if(row.length > 1 || row[0]) rows.push(row);
+    return rows;
+  }
+
+  // ---------- Import Issues CSV ----------
+  document.getElementById('f-import-issues').addEventListener('change', function(evt){
+    var file = evt.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        var rows = parseCSV(e.target.result);
+        if(rows.length < 2){ document.getElementById('issues-status').textContent = 'CSV appears empty.'; return; }
+        var headers = rows[0];
+        function val(r, name){ var i = headers.indexOf(name); return i >= 0 && r[i] ? r[i].trim() : ''; }
+
+        // Schema validation
+        var toolIdx = headers.indexOf('Slaughter Cataloger Tool');
+        if(toolIdx >= 0 && rows[1][toolIdx] && rows[1][toolIdx].trim() !== 'Issues'){
+          alert('This does not appear to be a compatible Slaughter Cataloger Beta 2.0 Issues CSV.');
+          return;
+        }
+
+        issues = [];
+        rows.slice(1).forEach(function(r){
+          if(r.length === 1 && r[0] === '') return;
+          issues.push({
+            librarySlug: val(r,'Title Library Slug'),
+            issueID: val(r,'IssueID'),
+            titleID: val(r,'TitleID'),
+            titleCode: val(r,'Title Code'),
+            firstYear: val(r,'First Year of Publication (CE)'),
+            shortname: val(r,'Short Name'),
+            title: val(r,'Title'),
+            subtitle: val(r,'Subtitle'),
+            publisher: val(r,'Publisher'),
+            editors: val(r,'Editor(s)'),
+            printer: val(r,'Printer'),
+            printerLocation: val(r,'Printer Location'),
+            volume: val(r,'Volume'),
+            issue: val(r,'Issue'),
+            number: val(r,'Whole No.') || val(r,'Number'),
+            months: val(r,'Month(s)'),
+            day: val(r,'Day'),
+            datePrinted: val(r,'Date as Printed'),
+            year: val(r,'Year'),
+            endYear: val(r,'End Year'),
+            pages: val(r,'Pages'),
+            size: val(r,'Size'),
+            sizeUnit: val(r,'Size Unit'),
+            price: val(r,'Price'),
+            series: val(r,'Series'),
+            city: val(r,'City'),
+            state: val(r,'State'),
+            country: val(r,'Country'),
+            frequency: val(r,'Frequency'),
+            specialIssue: /^y/i.test(val(r,'Special Issue')),
+            issueDesignation: val(r,'Issue Designation'),
+            supplement: /^y/i.test(val(r,'Supplement')),
+            supplementLabel: val(r,'Supplement Label'),
+            notes: val(r,'Notes on Issue'),
+            speculative: /^y/i.test(val(r,'Speculative')),
+            specFields: val(r,'Speculative Fields'),
+            evidenceBasis: val(r,'Evidence Basis'),
+            evidenceNote: val(r,'Evidence Note'),
+            entryOrder: parseInt(val(r,'Entry Order'),10) || 0
+          });
+        });
+        issues.sort(function(a,b){ return a.entryOrder - b.entryOrder; });
+        titleLibrarySlug = issues.length > 0 ? (issues[0].librarySlug || '') : '';
+        document.getElementById('issues-status').textContent = issues.length + ' issue(s) loaded' + (titleLibrarySlug ? ' from ' + titleLibrarySlug : '') + '.';
+        generateBtn.disabled = false;
+        checkRISReadiness();
+        showExpectedFilenames();
+      }catch(err){
+        document.getElementById('issues-status').textContent = 'Import failed — check the file format.';
+      }
+      evt.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // ---------- Contents CSV import ----------
+  var contents = [];
+  document.getElementById('f-import-contents').addEventListener('change', function(evt){
+    var file = evt.target.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        var rows = parseCSV(e.target.result);
+        if(rows.length < 2){ document.getElementById('contents-status').textContent = 'CSV appears empty.'; return; }
+        var headers = rows[0];
+        function val(r, name){ var i = headers.indexOf(name); return i >= 0 && r[i] ? r[i].trim() : ''; }
+        var toolIdx = headers.indexOf('Slaughter Cataloger Tool');
+        if(toolIdx >= 0 && rows[1][toolIdx] && rows[1][toolIdx].trim() !== 'Contents'){
+          alert('This does not appear to be a compatible Slaughter Cataloger Beta 2.0 Contents CSV.'); return;
+        }
+        // Validate slug match
+        var contentsSlug = rows[1] ? val(rows[1], 'Title Library Slug') : '';
+        if(titleLibrarySlug && contentsSlug && contentsSlug !== titleLibrarySlug){
+          alert('Title Library Slug mismatch: Issues CSV uses "' + titleLibrarySlug + '" but Contents CSV uses "' + contentsSlug + '".'); return;
+        }
+        contents = [];
+        rows.slice(1).forEach(function(r){
+          if(r.length === 1 && r[0] === '') return;
+          contents.push({
+            issueID: val(r,'IssueID'),
+            titleID: val(r,'TitleID'),
+            issueRef: val(r,'Issue Reference'),
+            sequence: val(r,'Sequence'),
+            itemTitle: val(r,'Item Title'),
+            author: val(r,'Author / Credit'),
+            contentType: val(r,'Content Type'),
+            parentItem: val(r,'Parent Item'),
+            startPage: val(r,'Start Page'),
+            endPage: val(r,'End Page'),
+            notes: val(r,'Notes'),
+            speculative: /^y/i.test(val(r,'Speculative')),
+            specFields: val(r,'Speculative Fields'),
+            naFields: val(r,'N/A Fields'),
+            librarySlug: val(r,'Title Library Slug')
+          });
+        });
+        // Validate Contents IssueIDs exist in loaded Issues
+        if(issues.length > 0){
+          var issueIDSet = {};
+          issues.forEach(function(iss){ issueIDSet[iss.issueID] = true; });
+          var orphans = contents.filter(function(c){ return c.issueID && !issueIDSet[c.issueID]; });
+          if(orphans.length > 0){
+            document.getElementById('contents-status').textContent = contents.length + ' item(s) loaded. WARNING: ' + orphans.length + ' item(s) reference IssueIDs not in loaded Issues.';
+          } else {
+            document.getElementById('contents-status').textContent = contents.length + ' contents item(s) loaded.';
+          }
+        } else {
+          document.getElementById('contents-status').textContent = contents.length + ' contents item(s) loaded. Load Issues CSV for full validation.';
+        }
+      }catch(err){ alert('Could not parse Contents CSV.'); }
+      evt.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  function checkRISReadiness(){
+    // RIS requires all three validated CSVs
+    risReady = (loadedTitles && loadedTitles.length > 0 && issues.length > 0 && contents.length > 0);
+    // Show/hide RIS export button based on readiness
+    var risBtn = document.getElementById('export-ris-btn');
+    if(risBtn) risBtn.disabled = !risReady;
+    // Update RIS option label
+    var risOpt = document.querySelector('#f-format option[value="ris"]');
+    if(risOpt) risOpt.textContent = risReady ? 'RIS for Zotero (ready)' : 'RIS for Zotero (requires Titles + Issues + Contents)';
+  }
+
+  // ---------- Titles CSV import ----------
+  document.getElementById('f-import-titles').addEventListener('change', function(evt){
+    var file = evt.target.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        var rows = parseCSV(e.target.result);
+        if(rows.length < 2){ document.getElementById('titles-status').textContent = 'CSV appears empty.'; return; }
+        var headers = rows[0];
+        function val(r, name){ var i = headers.indexOf(name); return i >= 0 && r[i] ? r[i].trim() : ''; }
+        var toolIdx = headers.indexOf('Slaughter Cataloger Tool');
+        if(toolIdx >= 0 && rows[1][toolIdx] && rows[1][toolIdx].trim() !== 'Titles'){
+          alert('This does not appear to be a compatible Slaughter Cataloger Beta 2.0 Titles CSV.'); return;
+        }
+        // Check slug match if Issues already loaded
+        var titlesSlug = rows[1] ? val(rows[1], 'Title Library Slug') : '';
+        if(titleLibrarySlug && titlesSlug && titlesSlug !== titleLibrarySlug){
+          alert('Title Library Slug mismatch: Issues CSV uses "' + titleLibrarySlug + '" but Titles CSV uses "' + titlesSlug + '". Load the matching Titles CSV.');
+          return;
+        }
+        loadedTitles = [];
+        rows.slice(1).forEach(function(r){
+          if(r.length === 1 && r[0] === '') return;
+          loadedTitles.push({ canonicalTitle: val(r,'Canonical Title'), titleID: val(r,'TitleID'), librarySlug: val(r,'Title Library Slug'), expectedIssuesFilename: val(r,'Expected Issues Filename'), expectedContentsFilename: val(r,'Expected Contents Filename') });
+        });
+        if(!titleLibrarySlug && loadedTitles.length > 0) titleLibrarySlug = loadedTitles[0].librarySlug || '';
+        document.getElementById('titles-status').textContent = loadedTitles.length + ' title(s) loaded' + (titlesSlug ? ' from ' + titlesSlug : '') + '.';
+        checkRISReadiness();
+        showExpectedFilenames();
+      }catch(err){ alert('Could not parse Titles CSV.'); }
+      evt.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // ---------- Expected filenames from Titles ----------
+  function showExpectedFilenames(){
+    if(!loadedTitles || loadedTitles.length === 0) return;
+    var hints = [];
+    loadedTitles.forEach(function(t){
+      if(t.expectedIssuesFilename) hints.push('Issues: ' + t.expectedIssuesFilename);
+      if(t.expectedContentsFilename) hints.push('Contents: ' + t.expectedContentsFilename);
+    });
+    if(hints.length > 0){
+      var statusEl = document.getElementById('titles-status');
+      if(statusEl) statusEl.title = 'Expected files:\n' + hints.join('\n');
+    }
+  }
+
+  // ---------- Options ----------
+  function opt(id){ return document.getElementById(id).checked; }
+
+  // ---------- Build date string ----------
+  function dateStr(iss){
+    if(iss.datePrinted) return iss.datePrinted;
+    var parts = [];
+    if(iss.months) parts.push(iss.months);
+    if(iss.day) parts.push(iss.day + ',');
+    if(iss.year) parts.push(iss.year);
+    if(iss.endYear) parts.push('–' + iss.endYear);
+    return parts.join(' ') || '';
+  }
+
+  // ---------- Build numbering string ----------
+  function numberStr(iss){
+    var parts = [];
+    if(iss.volume) parts.push('Vol. ' + iss.volume);
+    if(iss.issue) parts.push('No. ' + iss.issue);
+    if(iss.number && !iss.issue) parts.push('No. ' + iss.number);
+    else if(iss.number && iss.issue) parts.push('(Whole No. ' + iss.number + ')');
+    if(parts.length === 0 && iss.shortname) return iss.shortname;
+    return parts.join(', ');
+  }
+
+  // ---------- Build checklist line ----------
+  function buildLine(iss, style){
+    var line = '';
+    var num = numberStr(iss);
+    var date = dateStr(iss);
+
+    if(style === 'plain'){
+      line = num;
+      if(date) line += ' — ' + date;
+    }
+
+    if(style === 'biblio'){
+      line = num;
+      if(date) line += ', ' + date + '.';
+      if(opt('opt-pages') && iss.pages) line += ' ' + iss.pages + ' pages.';
+      if(opt('opt-size') && iss.size) line += ' ' + iss.size + (iss.sizeUnit ? ' ' + iss.sizeUnit : '') + '.';
+      if(opt('opt-price') && iss.price) line += ' ' + iss.price + '.';
+      if(opt('opt-publisher') && iss.publisher) line += ' ' + iss.publisher + (iss.city ? ', ' + iss.city : '') + '.';
+      if(opt('opt-printer') && iss.printer) line += ' Printed by ' + iss.printer + (iss.printerLocation ? ', ' + iss.printerLocation : '') + '.';
+    }
+
+    if(style === 'technical'){
+      if(iss.issueID) line = iss.issueID + ' — ';
+      line += num;
+      if(date) line += ' — ' + date;
+    }
+
+    // Append optional fields (all styles)
+    if(style !== 'biblio'){
+      if(opt('opt-pages') && iss.pages) line += ' [' + iss.pages + 'pp]';
+      if(opt('opt-price') && iss.price) line += ' [' + iss.price + ']';
+    }
+    if(opt('opt-issueid') && style !== 'technical' && iss.issueID) line += ' {' + iss.issueID + '}';
+    if(opt('opt-subtitle') && iss.subtitle) line += ' — "' + iss.subtitle + '"';
+    if(opt('opt-designation') && iss.issueDesignation) line += ' [' + iss.issueDesignation + ']';
+    if(opt('opt-designation') && iss.supplement && iss.supplementLabel) line += ' [Supplement: ' + iss.supplementLabel + ']';
+    if(opt('opt-evidence') && iss.evidenceBasis === 'Reported') line += ' [Reported' + (iss.evidenceNote ? ': ' + iss.evidenceNote : '') + ']';
+
+    return line;
+  }
+
+  // ---------- Generate ----------
+  generateBtn.addEventListener('click', function(){
+    if(issues.length === 0) return;
+
+    // RIS mode
+    if(document.getElementById('f-format').value === 'ris'){
+      if(!risReady){
+        alert('RIS export requires validated Titles, Issues, and Contents CSVs from the same Title Library.');
+        return;
+      }
+      var risOutput = buildRIS();
+      previewBox.textContent = risOutput;
+      previewContainer.style.display = '';
+      return;
+    }
+
+    var style = document.getElementById('f-style').value;
+    var showCheck = opt('opt-checkboxes');
+    var showSpec = opt('opt-speculative');
+    var showNotes = opt('opt-notes');
+    var groupByTitle = opt('opt-group-title');
+
+    // Group issues by title if requested
+    var groups = {};
+    var groupOrder = [];
+    issues.forEach(function(iss){
+      var key = groupByTitle ? (iss.title || 'Untitled') : '__all__';
+      if(!groups[key]){ groups[key] = []; groupOrder.push(key); }
+      groups[key].push(iss);
+    });
+
+    // Build HTML preview
+    var html = '';
+    groupOrder.forEach(function(groupKey){
+      if(groupByTitle && groupKey !== '__all__'){
+        html += '<h3>' + esc(groupKey) + '</h3>';
+      }
+      groups[groupKey].forEach(function(iss){
+        var line = buildLine(iss, style);
+        html += '<div class="cl-item">';
+        if(showCheck) html += '<span class="cl-check">☐</span>';
+        html += esc(line);
+        if(showSpec && iss.speculative) html += ' <span class="cl-speculative">[speculative' + (iss.specFields ? ': ' + iss.specFields : '') + ']</span>';
+        if(showNotes && iss.notes) html += '<br><span class="cl-detail">&nbsp;&nbsp;&nbsp;' + esc(iss.notes) + '</span>';
+        html += '</div>';
+      });
+    });
+
+    previewBox.innerHTML = html;
+    previewContainer.style.display = '';
+  });
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  // ---------- Build RIS ----------
+  function buildRIS(){
+    if(contents.length === 0){ alert('RIS export requires a loaded Contents CSV.'); return ''; }
+    var issueMap = {};
+    issues.forEach(function(iss){ issueMap[iss.issueID] = iss; });
+    var titleMap = {};
+    if(loadedTitles){
+      loadedTitles.forEach(function(t){ titleMap[t.titleID] = t; });
+    }
+
+    var records = [];
+    contents.forEach(function(c){
+      var iss = issueMap[c.issueID] || {};
+      var title = titleMap[c.titleID || iss.titleID] || {};
+      var lines = [];
+      lines.push('TY  - JOUR');
+      if(c.itemTitle) lines.push('TI  - ' + risClean(c.itemTitle));
+      if(c.author){
+        c.author.split(';').forEach(function(a){
+          a = a.trim();
+          if(a) lines.push('AU  - ' + risClean(a));
+        });
+      }
+      lines.push('T2  - ' + risClean(title.canonicalTitle || iss.title || ''));
+      if(iss.year) lines.push('PY  - ' + risClean(iss.year));
+      if(iss.datePrinted) lines.push('DA  - ' + risClean(iss.datePrinted));
+      if(iss.volume) lines.push('VL  - ' + risClean(iss.volume));
+      if(iss.issue) lines.push('IS  - ' + risClean(iss.issue));
+      if(c.startPage) lines.push('SP  - ' + risClean(c.startPage));
+      if(c.endPage) lines.push('EP  - ' + risClean(c.endPage));
+      if(iss.issn || title.issn) lines.push('SN  - ' + risClean(iss.issn || title.issn || ''));
+      if(iss.language || title.language) lines.push('LA  - ' + risClean(iss.language || title.language || ''));
+      // Preserve Slaughter Cataloger identifiers
+      if(titleLibrarySlug) lines.push('KW  - ' + titleLibrarySlug);
+      if(c.titleID || iss.titleID) lines.push('KW  - ' + (c.titleID || iss.titleID));
+      if(c.issueID) lines.push('KW  - ' + c.issueID);
+      if(c.contentType) lines.push('KW  - ' + risClean(c.contentType));
+      // Notes
+      if(c.titleID || iss.titleID) lines.push('N1  - Slaughter Cataloger TitleID: ' + (c.titleID || iss.titleID));
+      if(c.issueID) lines.push('N1  - Slaughter Cataloger IssueID: ' + c.issueID);
+      if(c.contentType) lines.push('N1  - Content Type: ' + risClean(c.contentType));
+      if(c.speculative && c.specFields) lines.push('N1  - Speculative fields: ' + risClean(c.specFields));
+      if(c.notes) lines.push('N1  - ' + risClean(c.notes));
+      lines.push('ER  - ');
+      records.push(lines.join('\n'));
+    });
+    return records.join('\n\n');
+  }
+
+  function risClean(s){
+    s = String(s || '');
+    s = s.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    // Prevent accidental ER  - inside user text
+    s = s.replace(/^ER  -/g, 'ER -');
+    return s;
+  }
+
+  // ---------- Build plain text ----------
+  function buildPlainText(){
+    var style = document.getElementById('f-style').value;
+    var showCheck = opt('opt-checkboxes');
+    var showSpec = opt('opt-speculative');
+    var showNotes = opt('opt-notes');
+    var groupByTitle = opt('opt-group-title');
+
+    var groups = {};
+    var groupOrder = [];
+    issues.forEach(function(iss){
+      var key = groupByTitle ? (iss.title || 'Untitled') : '__all__';
+      if(!groups[key]){ groups[key] = []; groupOrder.push(key); }
+      groups[key].push(iss);
+    });
+
+    var lines = [];
+    groupOrder.forEach(function(groupKey){
+      if(groupByTitle && groupKey !== '__all__'){
+        if(lines.length > 0) lines.push('');
+        lines.push(groupKey);
+        lines.push('='.repeat(groupKey.length));
+      }
+      groups[groupKey].forEach(function(iss){
+        var line = '';
+        if(showCheck) line += '☐ ';
+        line += buildLine(iss, style);
+        if(showSpec && iss.speculative) line += ' [speculative' + (iss.specFields ? ': ' + iss.specFields : '') + ']';
+        lines.push(line);
+        if(showNotes && iss.notes) lines.push('   ' + iss.notes);
+      });
+    });
+    return lines.join('\n');
+  }
+
+  // ---------- Build Markdown ----------
+  function buildMarkdown(){
+    var style = document.getElementById('f-style').value;
+    var showCheck = opt('opt-checkboxes');
+    var showSpec = opt('opt-speculative');
+    var showNotes = opt('opt-notes');
+    var groupByTitle = opt('opt-group-title');
+
+    var groups = {};
+    var groupOrder = [];
+    issues.forEach(function(iss){
+      var key = groupByTitle ? (iss.title || 'Untitled') : '__all__';
+      if(!groups[key]){ groups[key] = []; groupOrder.push(key); }
+      groups[key].push(iss);
+    });
+
+    var lines = [];
+    groupOrder.forEach(function(groupKey){
+      if(groupByTitle && groupKey !== '__all__'){
+        if(lines.length > 0) lines.push('');
+        lines.push('### ' + groupKey);
+        lines.push('');
+      }
+      groups[groupKey].forEach(function(iss){
+        var line = '';
+        if(showCheck) line += '- [ ] ';
+        else line += '- ';
+        line += buildLine(iss, style);
+        if(showSpec && iss.speculative) line += ' *[speculative' + (iss.specFields ? ': ' + iss.specFields : '') + ']*';
+        lines.push(line);
+        if(showNotes && iss.notes) lines.push('  > ' + iss.notes);
+      });
+    });
+    return lines.join('\n');
+  }
+
+  // ---------- Build standalone HTML ----------
+  function buildHTML(){
+    var content = previewBox.innerHTML;
+    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Checklist</title>\n<style>\n  body{font-family:"Courier New",Courier,monospace; font-size:13px; line-height:1.7; max-width:700px; margin:40px auto; padding:0 20px; color:#111;}\n  h3{font-family:Georgia,serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#4a4a4a; margin:20px 0 8px; padding-bottom:4px; border-bottom:1px solid #c9c9c9;}\n  h3:first-child{margin-top:0;}\n  .cl-item{margin-bottom:4px;}\n  .cl-check{color:#8a8a8a; margin-right:6px;}\n  .cl-speculative{color:#4a4a4a; font-style:italic; font-size:11px;}\n  .cl-detail{font-size:11px; color:#4a4a4a;}\n</style>\n</head>\n<body>\n' + content + '\n</body>\n</html>';
+  }
+
+  // ---------- Export handlers ----------
+  function downloadFile(content, filename, mime){
+    var blob = new Blob([content], {type: mime});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    exportStatus.textContent = 'Exported: ' + filename;
+    setTimeout(function(){ exportStatus.textContent = ''; }, 3000);
+  }
+
+  document.getElementById('copy-output-btn').addEventListener('click', function(){
+    var text = buildPlainText();
+    navigator.clipboard.writeText(text).then(function(){
+      exportStatus.textContent = 'Copied to clipboard.';
+    }, function(){
+      exportStatus.textContent = 'Copy failed.';
+    });
+    setTimeout(function(){ exportStatus.textContent = ''; }, 3000);
+  });
+
+  document.getElementById('export-html-btn').addEventListener('click', function(){
+    var slug = titleLibrarySlug || 'LIBRARY';
+    var date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    var scope = (loadedTitles && loadedTitles.length === 1) ? '_' + loadedTitles[0].titleID : '';
+    downloadFile(buildHTML(), 'SCATOUT_' + slug + scope + '_CHECKLIST_' + date + '.html', 'text/html');
+  });
+
+  document.getElementById('export-md-btn').addEventListener('click', function(){
+    var slug = titleLibrarySlug || 'LIBRARY';
+    var date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    var scope2 = (loadedTitles && loadedTitles.length === 1) ? '_' + loadedTitles[0].titleID : '';
+    downloadFile(buildMarkdown(), 'SCATOUT_' + slug + scope2 + '_CHECKLIST_' + date + '.md', 'text/markdown');
+  });
+
+  // RIS export button
+  var risExportBtn = document.createElement('button');
+  risExportBtn.className = 'btn small ghost';
+  risExportBtn.id = 'export-ris-btn';
+  risExportBtn.textContent = 'Export RIS';
+  document.getElementById('export-txt-btn').parentNode.insertBefore(risExportBtn, document.getElementById('export-txt-btn').nextSibling);
+  risExportBtn.addEventListener('click', function(){
+    if(contents.length === 0){ alert('RIS export requires a loaded Contents CSV.'); return; }
+    var slug = titleLibrarySlug || 'LIBRARY';
+    var date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    downloadFile(buildRIS(), 'SCATOUT_' + slug + '_RIS-ZOTERO_' + date + '.ris', 'application/x-research-info-systems');
+  });
+
+  document.getElementById('export-txt-btn').addEventListener('click', function(){
+    var slug = titleLibrarySlug || 'LIBRARY';
+    var date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    var scope3 = (loadedTitles && loadedTitles.length === 1) ? '_' + loadedTitles[0].titleID : '';
+    downloadFile(buildPlainText(), 'SCATOUT_' + slug + scope3 + '_CHECKLIST_' + date + '.txt', 'text/plain');
+  });
+
+  // ---------- Auto-regenerate on option change ----------
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="checkbox"], select'), function(el){
+    el.addEventListener('change', function(){
+      if(issues.length > 0 && previewContainer.style.display !== 'none'){
+        generateBtn.click();
+      }
+    });
+  });
+
+  // Format/style dropdown switching
+  var formatSelect = document.getElementById('f-format');
+  var styleField = document.getElementById('style-field');
+  var checklistOptionsEl = document.querySelector('[class="grid"]:has(#opt-checkboxes)') || document.querySelectorAll('.grid')[2]; // options grid
+
+  formatSelect.addEventListener('change', function(){
+    var isRIS = formatSelect.value === 'ris';
+    styleField.style.display = isRIS ? 'none' : '';
+    // RIS needs Contents
+    if(isRIS && contents.length === 0){
+      generateBtn.disabled = true;
+    } else if(issues.length > 0){
+      generateBtn.disabled = false;
+    }
+  });
+
+  document.getElementById('f-style').addEventListener('change', function(){
+    var style = this.value;
+    if(style === 'technical'){
+      document.getElementById('opt-issueid').checked = false;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
