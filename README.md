@@ -6,7 +6,7 @@ Build a structured, exportable bibliography of periodicals — newsletters, maga
 
 ## Getting Started
 
-Download all six files into the same folder and open `slaughter-cataloger-beta2.5.html` in any modern browser. No installation, no server, no internet connection required.
+Download all five HTML files into the same folder and open `slaughter-cataloger-beta2.6.html` in any modern browser. No installation, no server, no internet connection required.
 
 Each app is a self-contained HTML file. Open them directly from disk (`File → Open`) or, if your browser restricts local file access, serve the folder with any lightweight local server:
 
@@ -14,16 +14,16 @@ Each app is a self-contained HTML file. Open them directly from disk (`File → 
 python3 -m http.server
 ```
 
-Then visit `http://localhost:8000/slaughter-cataloger-beta2.5.html`.
+Then visit `http://localhost:8000/slaughter-cataloger-beta2.6.html`.
 
 Work through the apps in order: **Titles → Issues → Contents → Compiler**.
 
 ## The Suite
 
-- **Titles** (`slaughter-01titles-beta2.5.html`) — manages title-level metadata: canonical title, publication history, publisher, editors, frequency, ISSN. Creates TitleID, the upstream key for the entire suite.
-- **Issues** (`slaughter-02issues-beta2.5.html`) — canonical issue list: volume, issue number, whole number, date, printer, pages, size, notes, and more. Requires a Titles CSV.
-- **Contents** (`slaughter-03contents-beta2.5.html`) — records what appears inside each issue: articles, poems, editorials, authors, page ranges, content types. Requires an Issues CSV.
-- **Compiler** (`slaughter-04compiler-beta2.5.html`) — produces formatted outputs from assembled title data. Current: Checklist, RIS for Zotero, Proofing Catalog, and WordPress Catalog. Future: bibliography and contents listing.
+- **Titles** (`slaughter-01titles-beta2.6.html`) — manages title-level metadata: canonical title, publication history, publisher, editors, frequency, ISSN. Creates TitleID, the upstream key for the entire suite.
+- **Issues** (`slaughter-02issues-beta2.6.html`) — canonical issue list: volume, issue number, whole number, date, printer, pages, size, notes, and more. Requires a Titles CSV.
+- **Contents** (`slaughter-03contents-beta2.6.html`) — records what appears inside each issue: articles, poems, editorials, authors, page ranges, content types. Requires an Issues CSV.
+- **Compiler** (`slaughter-04compiler-beta2.6.html`) — produces formatted outputs from assembled title data. Current: Checklist, RIS for Zotero, Proofing Catalog, and WordPress Catalog. Future: bibliography and contents listing.
 
 All tools are linked by **IssueID**, a permanent machine key (`TITLECOD-FIRSTYEAR-KXXXXXX`) that survives renaming, reordering, and editing. Every CSV includes schema metadata (`Slaughter Cataloger Tool` + `Schema Version`) for validation on import.
 
@@ -59,14 +59,14 @@ Each tool validates that loaded files have the correct schema and matching Title
 ## How to Use It
 
 1. Download all `.html` files into the same folder
-2. Start with `slaughter-01titles-beta2.5.html` — create your title records
-3. Export Titles CSV, then open `slaughter-02issues-beta2.5.html` (Issues)
+2. Start with `slaughter-01titles-beta2.6.html` — create your title records
+3. Export Titles CSV, then open `slaughter-02issues-beta2.6.html` (Issues)
 4. Load your Titles CSV, select a title, catalog issues
-5. Export Issues CSV, then open `slaughter-03contents-beta2.5.html` (Contents)
+5. Export Issues CSV, then open `slaughter-03contents-beta2.6.html` (Contents)
 6. Load your Issues CSV, select an issue, record contents
-7. Open `slaughter-04compiler-beta2.5.html` to generate checklists
+7. Open `slaughter-04compiler-beta2.6.html` to generate outputs
 
-No installation, no dependencies, no internet connection required. See `slaughter-cataloger-beta2.5.html` for full documentation.
+No installation, no dependencies, no internet connection required. See `slaughter-cataloger-beta2.6.html` for full documentation.
 
 ---
 
@@ -103,17 +103,19 @@ Backup/autosave files are explicitly labeled: `SCAT_[SLUG]_[TITLEID]_ISSUES_BACK
 
 ## Documentation
 
-See `slaughter-cataloger-beta2.5.html` for a full description of the suite architecture, IssueID system, field states, features, and release history.
+See `slaughter-cataloger-beta2.6.html` for a full description of the suite architecture, IssueID system, field states, features, and release history.
 
 ---
 
 ## Status
 
-**Beta 2.5** — released July 14, 2026.
+**Beta 2.6** — released July 2026.
 
 ---
 
 ## Release History
+
+**Beta 2.6** — July 2026. Titles dashboard for loading a library’s Titles, Issues, and Contents files together and viewing cataloging progress across all titles.
 
 **Beta 2.5** — July 2026. New Compiler output modes: WordPress Catalog (native Gutenberg blocks), Proofing Catalog (print-optimised verification document), Full Catalog HTML. Volume/year grouping in all catalog outputs. Scope panel for filtering by volume or year group. Active titles filter — outputs only include titles with loaded issues. Compiler: unified readiness function, full RIS cross-validation, string-safe escape helpers, blank key validation, context-sensitive options panel, full title metadata in Titles manifest.
 
